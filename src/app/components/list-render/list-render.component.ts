@@ -24,10 +24,15 @@ export class ListRenderComponent implements OnInit {
   }
 
   removeAnimal(animal: Animal) {
+    //Removendo animal visualmente -FRONTEND
     this.animals = this.animals.filter((a) => animal.name !== a.name)
+    
+    //Removend oanimal da API - BACKEND
     this.listService.remove(animal.id).subscribe()
   }
 
+
+  //Pegando a resposta da URL da API
   getAnimals():void {
      this.listService.getAll().subscribe((data) => {
       this.animals = data
