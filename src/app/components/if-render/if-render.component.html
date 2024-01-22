@@ -1,0 +1,10 @@
+<p *ngIf="canShow">Esse texto está visível</p>
+<button (click)="changeText()">Change</button>
+
+<h2 *ngIf=" name === 'Gabriel'; else nameNotFound ">O nome é Gabriel - feito com ngIF</h2>
+
+<ng-template #nameNotFound>
+    <p>Nome não encontrado, você escreveu {{name}} -</p>
+</ng-template>
+
+<h2>{{mensagem}} - feito no typeScritp com if-else</h2>

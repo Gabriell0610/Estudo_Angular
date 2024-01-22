@@ -1,0 +1,6 @@
+<input type="text" [(ngModel)]="name" placeholder="Digite seu nome" />
+<input type="submit" value="Enviar" />
+
+
+<p *ngIf="name !== '' " >O nome é : {{ name }}</p>
+

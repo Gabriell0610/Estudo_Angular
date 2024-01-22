@@ -1,0 +1,12 @@
+<p>loop de lista feita com ngFor</p>
+<ul>
+  <li *ngFor="let animal of animals">
+    Nome:
+    <a routerLink="/diretivas-estruturais/{{ animal.id }}">{{ animal.name }}</a>
+    - Raça: {{ animal.type }}
+    <button (click)="showAge(animal)">Show Age</button>
+    <button (click)="removeAnimal(animal)">Excluir</button>
+  </li>
+
+  <h3>{{ animalsDetails }}</h3>
+</ul>

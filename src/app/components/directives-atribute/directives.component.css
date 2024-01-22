@@ -1,0 +1,15 @@
+.ligado {
+    color: rgb(168, 168, 21);
+}
+
+.desligado {
+    color: #ce1111;
+}
+
+.blue-title {
+    color: blue;
+}
+
+.small-title {
+    font-size: 13px;
+}

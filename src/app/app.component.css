@@ -1,0 +1,9 @@
+nav ul{
+    display: flex;
+    gap: 3rem;
+}
+
+.activated {
+    color: green;
+    font-weight: bold;
+}
