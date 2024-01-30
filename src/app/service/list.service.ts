@@ -24,7 +24,7 @@ export class ListService {
     return this.http.get<Animal[]>(this.apiUrl)
   }
 
-  //esse função rece o id que vem da url do item-details
+  //esse função recebe o id que vem da url do item-details
   getItem(id: number):Observable<Animal> {
     //Ela então retorna o fetch da URL junto do id, ou seja, 
     //retorna os valores do animal de acordo com o id

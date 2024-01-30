@@ -1,13 +1,19 @@
 {
   "animals": [
     {
-      "id": "4",
+      "id": "1",
+      "name": "Caio",
+      "type": "Burro",
+      "age": 9
+    },
+    {
+      "id": "2",
       "name": "Bob",
       "type": "Horse",
       "age": 2
     },
     {
-      "id": "5",
+      "id": "3",
       "name": "Paco",
       "type": "Bird",
       "age": 1

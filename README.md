@@ -71,6 +71,7 @@ Os serviços desempenham um papel fundamental como fornecedores de funcionalidad
 **Integração com APIs e Backend:**
 
 - Serviços são frequentemente utilizados para encapsular chamadas HTTP e interações com APIs ou backends. Isso centraliza a lógica de comunicação, facilitando a manutenção e a atualização.
+
 ## Requisição HTTP
 Etapas de como fazer uma requisição HTTP 
 
@@ -89,25 +90,20 @@ Nessa interface abaixo eu já garanti os dados que virão da requisição. E ela
 
 ```tsx
 Arquivo de Interface
-export interface Pokemon {
+export interface Animal {
+    id: number
     name: string,
-    sprites: {
-        front_default: string
-    },
-    types: {
-        type: {
-            name: string
-        }
-    }[]
-
+    type: string,
+    age: number
 }
+
 ```
 ---
 1. **Injeção de Dependência:** Injeta-se o serviço **`HttpClient`** no componente ou serviço que precisa fazer a requisição.
     
-    A segunda etapa é; Toda requisição HTTP no angular é feito em um service para boas práticas, então é necessário criar um arquivo service dentro da pasta services e após isso importar o arquivo HttpCLient.
+  - A segunda etapa é; Toda requisição HTTP no angular é feito em um service para boas práticas, então é necessário criar um arquivo service dentro da pasta services e após isso importar o arquivo HttpCLient.
     
-    É importante também importar o Observables pois é com ele que podemos tratar resultados assíncronos de forma eficiente, possibilitando manipulação de fluxo, cancelamento de assinaturas e tratamento de erros
+  - É importante também importar o Observables pois é com ele que podemos tratar resultados assíncronos de forma eficiente, possibilitando manipulação de fluxo, cancelamento de assinaturas e tratamento de erros
     
 
 ```tsx
@@ -115,7 +111,7 @@ export interface Pokemon {
 import { Injectable } from '@angular/core'; //Arquivo padrão de todo Service**
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Pokemon } from '../models/Pokemon'; // A INTERFACE
+import { Animal } from '../models/Animal'; // A INTERFACE
 
 @Injectable({
   providedIn: 'root'
@@ -124,54 +120,53 @@ import { Pokemon } from '../models/Pokemon'; // A INTERFACE
 
 ---
 
-1. **Construção da Requisição:** Usa-se o **`HttpClient`** para construir a requisição HTTP (por exemplo, **`get`**, **`post`**, **`put`**, **`delete`**) com o URL da API desejada.
+2. **Construção da Requisição:** Usa-se o **`HttpClient`** para construir a requisição HTTP e é com ele que utilizamos o **`get`**, **`post`**, **`put`**, **`delete`** com a URL da API desejada.
 
-No service é preciso criar um http privado que seja do tipo HttpClient, ou seja, é com esse http que vamos conseguir usar os métodos de requisição. Esse http privado é sepre um parâmetro do constructor.
+- No service é preciso injetar a dependência HttpClient. Esse http privado é sempre um parâmetro do constructor.
 
 ```tsx
-export class PokemonService {
+export class AnimalService {
   constructor(private http:HttpClient) {}
 }
 ```
 
 ---
 
-Após isso é necessário fazer todo o tratamento da requisição seja ela uma API ou algo que venha do banco de dados e para isso vou dar um exemplo de uma API de pokemon. 
+Após isso é necessário fazer todo o tratamento da requisição seja ela uma API ou algo que venha do banco de dados e nesse caso vai ser de um arquivo JSON 
 
----
+- É preciso então criar uma função que retorne um Observable que seja do tipo da Interface.
+  
+- Essa função então retorna o http que chama o método get que também é necessário ser do tipo da Interface, como o get é um método é necessário só chamar a URL dentro dele
 
 ```tsx
-export class PokemonService {
-  pokeApi = environment.pokeApi
+export class AnimalService {
+   private apiUrl = 'http://localhost:3000/animals'
+
 
   constructor(private http:HttpClient) { 
    
   }
 
-  getAPI(namePokemon: string): Observable<Pokemon> {
-    return this.http.get<Pokemon>(`${this.pokeApi}`)
+  getAll():Observable <Animal[]> {
+    return this.http.get<Animal[]>(this.apiUrl)
   }
 
 }
 ```
 
-Agora é a hora de chamar a API, é preciso então criar uma função que retorne um Observable que seja do tipo da Interface.
-
-Essa função então retorna o http que chama o método get que também é necessário ser do tipo da Interface, como o get é um método é necessário só chamar a URL dentro dele
-
 ---
 
-Agora é só importar o service dentro do component que irá receber a resposta da URL e o Interface.
+Agora é só importar o service dentro do component para manipulação da resposta da API
 
 ```tsx
 import { Component, OnInit } from '@angular/core';
-import { Pokemon } from 'src/app/models/Pokemon';
-import { PokemonService } from 'src/app/services/pokemon.service';
+import { Animal } from 'src/app/models/animal';
+import { animalService } from 'src/app/services/animal.service';
 
 @Component({
-  selector: 'app-pokemon',
-  templateUrl: './pokemon.component.html',
-  styleUrls: ['./pokemon.component.css']
+  selector: 'app-animal',
+  templateUrl: './animal.component.html',
+  styleUrls: ['./animal.component.css']
 })
 
 ```
@@ -179,25 +174,34 @@ import { PokemonService } from 'src/app/services/pokemon.service';
 É preciso então inicializar o interface dentro do componente e chamar o service no constructor do componente
 
 ```tsx
-export class PokemonComponent implements OnInit {
-  pokemon: Pokemon = {
-    name: '',
-    sprites: {
-      front_default: ''
-    },
-    types:[]
-  }
-	constructor(private pokemonService: PokemonService) { }
+export class animalComponent implements OnInit {
+  animals: Animal[] = []
+	constructor(
+    private animalService: animalService
+  ) { }
+}
 ```
 
-1. **Envio da Requisição:** Chama-se o método **`subscribe()`** na Observable retornada pela chamada HTTP para enviar a requisição e aguardar a resposta e nela ocorre o **Tratamento da Resposta:** onde define-se o que fazer com a resposta recebida da API, como atualizar o estado da aplicação ou realizar outras ações.
+2. **Envio da Requisição:** Quando você chama o **subscribe()** em uma Observable, você efetivamente inicia o processo de envio da requisição HTTP e aguarda a resposta, e nela ocorre o **Tratamento da Resposta:** onde define-se o que fazer com a resposta recebida da API, como atualizar o estado da aplicação ou realizar outras ações.
 
-Um método então é criado e faz todo o tratamento da api, nesse caso preenche as propriedades do objeto pokemon
+Um método então é criado e faz toda a manipulação da api, que nesse caso preenche o objeto animals
+
+```tsx
+//Pegando a resposta da URL da API
+  getAnimals():void {
+     this.listService.getAll().subscribe((data) => {
+      this.animals = data
+      console.log(this.animals)
+     })   
+  }
+```
 
 ## Interfaces 
 Toda entidade que vamos trabalhar precisa de uma interface, isso torna o código mais simples facilitando a manutenção. Porém a criação de interfaces ao trabalhar com requisições em Angular não é estritamente necessária, mas é altamente recomendada. Aqui estão algumas razões pelas quais a criação de interfaces é uma prática valiosa:
 
 1. **Tipagem Forte:**
-    - As interfaces fornecem uma forma de aplicar tipagem forte aos dados recebidos nas respostas da API. Isso ajuda a detectar erros de digitação ou estrutura no código durante o desenvolvimento, tornando-o mais robusto.
+  - As interfaces fornecem uma forma de aplicar tipagem forte aos dados recebidos nas respostas da API. Isso ajuda a detectar erros de digitação ou estrutura no código durante o desenvolvimento, tornando-o mais robusto.
 2. **Documentação Embutida:**
-    - Ao criar interfaces, você documenta implicitamente a estrutura dos dados que espera receber da API. Outros desenvolvedores (ou você mesmo no futuro) podem facilmente entender a estrutura dos dados olhando para a interface.
+  - Ao criar interfaces, você documenta implicitamente a estrutura dos dados que espera receber da API. Outros desenvolvedores (ou você mesmo no futuro) podem facilmente entender a estrutura dos dados olhando para a interface.
+
+---

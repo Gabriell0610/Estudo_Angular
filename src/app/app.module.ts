@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -19,7 +19,9 @@ import { OutputComponent } from './pages/output/output.component';
 import { TwpWayComponent } from './pages/twp-way/twp-way.component';
 import { RequisicaoComponent } from './components/requisicao/requisicao.component'
 import {HttpClientModule} from '@angular/common/http';
-import { ItemDetailsComponent } from './components/item-details/item-details.component'
+import { ItemDetailsComponent } from './components/item-details/item-details.component';
+import { FormularioComponent } from './pages/formulario/formulario.component';
+import { FormDataComponent } from './components/form-data/form-data.component'
 
 
 
@@ -40,13 +42,16 @@ import { ItemDetailsComponent } from './components/item-details/item-details.com
     OutputComponent,
     TwpWayComponent,
     RequisicaoComponent,
-    ItemDetailsComponent
+    ItemDetailsComponent,
+    FormularioComponent,
+    FormDataComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

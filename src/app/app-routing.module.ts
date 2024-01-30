@@ -6,6 +6,7 @@ import { DiretivasEstruturaisComponent } from './pages/diretivas-estruturais/dir
 import { OutputComponent } from './pages/output/output.component';
 import { TwpWayComponent } from './pages/twp-way/twp-way.component';
 import { ItemDetailsComponent } from './components/item-details/item-details.component';
+import { FormularioComponent } from './pages/formulario/formulario.component';
 
 
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
   {path: 'diretivas-estruturais/:id', component:ItemDetailsComponent},
   {path: 'output', component: OutputComponent},
   {path: 'two-way', component: TwpWayComponent},
+  {path: 'formulario', component: FormularioComponent}
 
 ];
 
